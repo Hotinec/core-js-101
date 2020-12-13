@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* *******************************************************************************************
  *                                                                                           *
  * Plese read the following tutorial before implementing tasks:                              *
@@ -19,8 +20,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +35,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -53,8 +54,12 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  if (year % 4 !== 0) return false;
+  if (year % 100 !== 0) return true;
+  if (year % 400 !== 0) return false;
+  return true;
 }
 
 
@@ -73,8 +78,30 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const delta = endDate - startDate;
+
+  function msToTime(s) {
+    // eslint-disable-next-line prefer-const
+    let ms = s % 1000;
+    // eslint-disable-next-line no-param-reassign
+    s = (s - ms) / 1000;
+    // eslint-disable-next-line no-shadow
+    let seconds = s % 60;
+    // eslint-disable-next-line no-param-reassign
+    s = (s - seconds) / 60;
+    let minutes = s % 60;
+    let hours = (s - minutes) / 60;
+
+    hours = (hours < 10) ? `0${hours}` : hours;
+    minutes = (minutes < 10) ? `0${minutes}` : minutes;
+    seconds = (seconds < 10) ? `0${seconds}` : seconds;
+    if (ms < 10) ms = `00${ms}`;
+
+    return `${hours}:${minutes}:${seconds}.${ms}`;
+  }
+
+  return msToTime(delta);
 }
 
 
@@ -94,8 +121,15 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  let angle = Math.abs(0.5 * (60 * (date.getUTCHours() % 12) + date.getUTCMinutes())
+    - 6 * date.getUTCMinutes());
+  if (angle > 180) {
+    // eslint-disable-next-line no-const-assign
+    angle = 360 - angle;
+  }
+
+  return angle * (Math.PI / 180);
 }
 
 
